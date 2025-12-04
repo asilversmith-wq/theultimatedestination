@@ -328,8 +328,6 @@
 
     <script>
         // --- DATA MOCKUP ---
-        
-        // Helper to get random item from array
         const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
         
         const shuffle = (array) => {
@@ -342,48 +340,58 @@
             return array;
         }
 
-        // Expanded Database with Real Links
+        // --- HUGE POOL OF ACTIVITIES ---
         const db = {
             "new-york": {
                 name: "New York City",
-                teams: [{ home: "NY Knicks", venue: "MSG", league: "NBA" }],
+                teams: [{ home: "NY Knicks", venue: "MSG", league: "NBA" }, { home: "NY Rangers", venue: "MSG", league: "NHL" }, { home: "NY Yankees", venue: "Yankee Stadium", league: "MLB" }, { home: "Brooklyn Nets", venue: "Barclays Center", league: "NBA" }],
                 activities: {
                     culture: [
                         { name: "The Met", cost: "$30", hours: "10am-5pm", link: "https://www.metmuseum.org/", desc: "World-class art collection." },
                         { name: "Guggenheim Museum", cost: "$25", hours: "11am-6pm", link: "https://www.guggenheim.org/", desc: "Architectural masterpiece." },
-                        { name: "Intrepid Museum", cost: "$33", hours: "10am-5pm", link: "https://www.intrepidmuseum.org/", desc: "Aircraft carrier & space shuttle." }
+                        { name: "Intrepid Museum", cost: "$33", hours: "10am-5pm", link: "https://www.intrepidmuseum.org/", desc: "Aircraft carrier & space shuttle." },
+                        { name: "MoMA", cost: "$25", hours: "10:30am-5:30pm", link: "https://www.moma.org/", desc: "Modern art icons." },
+                        { name: "Broadway Show", cost: "$100+", hours: "Evening", link: "https://www.broadway.com/", desc: "World-famous theater." }
                     ],
                     food: [
                         { name: "Katz's Deli", cost: "$25", hours: "8am-11pm", link: "https://katzsdelicatessen.com/", desc: "Iconic pastrami sandwiches." },
                         { name: "Chelsea Market", cost: "Free Entry", hours: "7am-10pm", link: "https://www.chelseamarket.com/", desc: "Indoor food hall." },
-                        { name: "Joe's Pizza", cost: "$5", hours: "10am-3am", link: "https://www.joespizzanyc.com/", desc: "Classic NY slice." }
+                        { name: "Joe's Pizza", cost: "$5", hours: "10am-3am", link: "https://www.joespizzanyc.com/", desc: "Classic NY slice." },
+                        { name: "Levain Bakery", cost: "$5", hours: "8am-8pm", link: "https://levainbakery.com/", desc: "Famous giant cookies." },
+                        { name: "Smorgasburg", cost: "Varied", hours: "Weekends", link: "https://www.smorgasburg.com/", desc: "Open-air food market." }
                     ],
                     nature: [
                         { name: "Central Park", cost: "Free", hours: "6am-1am", link: "https://www.centralparknyc.org/", desc: "Urban oasis in Manhattan." },
                         { name: "The High Line", cost: "Free", hours: "7am-10pm", link: "https://www.thehighline.org/", desc: "Elevated park on rail line." },
-                        { name: "Brooklyn Botanic Garden", cost: "$18", hours: "8am-6pm", link: "https://www.bbg.org/", desc: "Peaceful gardens." }
+                        { name: "Brooklyn Botanic Garden", cost: "$18", hours: "8am-6pm", link: "https://www.bbg.org/", desc: "Peaceful gardens." },
+                        { name: "Little Island", cost: "Free", hours: "6am-1am", link: "https://littleisland.org/", desc: "Floating park on Hudson." }
                     ],
                     history: [
                         { name: "Statue of Liberty", cost: "$24", hours: "9am-5pm", link: "https://www.nps.gov/stli/", desc: "Symbol of freedom." },
                         { name: "9/11 Memorial", cost: "Free", hours: "9am-8pm", link: "https://www.911memorial.org/", desc: "Memorial pools." },
-                        { name: "Ellis Island", cost: "$24", hours: "9am-5pm", link: "https://www.nps.gov/elis/", desc: "Immigration history." }
+                        { name: "Ellis Island", cost: "$24", hours: "9am-5pm", link: "https://www.nps.gov/elis/", desc: "Immigration history." },
+                        { name: "Tenement Museum", cost: "$30", hours: "10am-6pm", link: "https://www.tenement.org/", desc: "Immigrant life tours." }
                     ],
                     shopping: [
                         { name: "SoHo Shopping", cost: "Varied", hours: "10am-8pm", link: "https://www.sohonyc.com/", desc: "Trendy boutiques." },
                         { name: "Rockefeller Center", cost: "Varied", hours: "24h", link: "https://www.rockefellercenter.com/", desc: "Shops and plaza." },
-                        { name: "Macy's Herald Square", cost: "Varied", hours: "10am-9pm", link: "https://www.macys.com/", desc: "World's largest store." }
+                        { name: "Macy's Herald Square", cost: "Varied", hours: "10am-9pm", link: "https://www.macys.com/", desc: "World's largest store." },
+                        { name: "Harry Potter Store", cost: "Free Entry", hours: "9am-9pm", link: "https://www.harrypotterstore.com/", desc: "Wizarding world merch." }
                     ],
                     adventure: [
                         { name: "The Edge", cost: "$40", hours: "10am-10pm", link: "https://www.edgenyc.com/", desc: "Highest outdoor sky deck." },
-                        { name: "Helicopter Tour", cost: "$200+", hours: "Daytime", link: "https://www.zipaviation.com/", desc: "Skyline views." }
+                        { name: "Helicopter Tour", cost: "$200+", hours: "Daytime", link: "https://www.zipaviation.com/", desc: "Skyline views." },
+                        { name: "Summit One Vanderbilt", cost: "$42", hours: "9am-12am", link: "https://summitov.com/", desc: "Immersive glass observation." }
                     ],
                     relaxation: [
                          { name: "Aire Ancient Baths", cost: "$150+", hours: "9am-11pm", link: "https://beaire.com/en/aire-ancient-baths-new-york", desc: "Luxury thermal baths." },
-                         { name: "Bryant Park", cost: "Free", hours: "7am-10pm", link: "https://bryantpark.org/", desc: "Relax on the lawn." }
+                         { name: "Bryant Park", cost: "Free", hours: "7am-10pm", link: "https://bryantpark.org/", desc: "Relax on the lawn." },
+                         { name: "Staten Island Ferry", cost: "Free", hours: "24h", link: "https://www.siferry.com/", desc: "Relaxing harbor ride." }
                     ],
                     nightlife: [
-                        { name: "Broadway Show", cost: "$100+", hours: "7pm", link: "https://www.broadway.com/", desc: "World-famous theater." },
-                        { name: "Times Square", cost: "Free", hours: "24h", link: "https://www.timessquarenyc.org/", desc: "Bright lights." }
+                        { name: "Comedy Cellar", cost: "$25", hours: "Evening", link: "https://www.comedycellar.com/", desc: "Legendary stand-up." },
+                        { name: "Times Square", cost: "Free", hours: "24h", link: "https://www.timessquarenyc.org/", desc: "Bright lights." },
+                        { name: "Jazz at Lincoln Center", cost: "$40+", hours: "7pm", link: "https://www.jazz.org/", desc: "World-class jazz." }
                     ]
                 }
             },
@@ -394,29 +402,35 @@
                     culture: [
                         { name: "Louvre Museum", cost: "€17", hours: "9am-6pm", link: "https://www.louvre.fr/en", desc: "Home of Mona Lisa." },
                         { name: "Musée d'Orsay", cost: "€16", hours: "9:30am-6pm", link: "https://www.musee-orsay.fr/en", desc: "Impressionist art." },
-                        { name: "Sainte-Chapelle", cost: "€11.50", hours: "9am-5pm", link: "https://www.sainte-chapelle.fr/en/", desc: "Stunning stained glass." }
+                        { name: "Sainte-Chapelle", cost: "€11.50", hours: "9am-5pm", link: "https://www.sainte-chapelle.fr/en/", desc: "Stunning stained glass." },
+                        { name: "Opera Garnier", cost: "€14", hours: "10am-5pm", link: "https://www.operadeparis.fr/en", desc: "Phantom of the Opera setting." }
                     ],
                     food: [
                         { name: "Café de Flore", cost: "€15", hours: "7am-1am", link: "https://cafedeflore.fr/", desc: "Historic cafe." },
                         { name: "Berthillon", cost: "€5", hours: "10am-8pm", link: "https://berthillon.fr/", desc: "Famous ice cream." },
-                        { name: "Rue Mouffetard Market", cost: "Free", hours: "Mornings", link: "https://en.parisinfo.com/", desc: "Street market." }
+                        { name: "Rue Mouffetard Market", cost: "Free", hours: "Mornings", link: "https://en.parisinfo.com/", desc: "Street market." },
+                        { name: "Angelina", cost: "€10", hours: "8am-7pm", link: "https://angelina-paris.fr/", desc: "Famous hot chocolate." }
                     ],
                     history: [
                         { name: "Versailles", cost: "€20", hours: "9am-6pm", link: "https://en.chateauversailles.fr/", desc: "Royal palace." },
                         { name: "Arc de Triomphe", cost: "€13", hours: "10am-10pm", link: "https://www.paris-arc-de-triomphe.fr/en/", desc: "Panoramic views." },
-                        { name: "Notre-Dame (Exterior)", cost: "Free", hours: "24h", link: "https://www.notredamedeparis.fr/", desc: "Gothic cathedral." }
+                        { name: "Notre-Dame (Exterior)", cost: "Free", hours: "24h", link: "https://www.notredamedeparis.fr/", desc: "Gothic cathedral." },
+                        { name: "Pantheon", cost: "€11", hours: "10am-6pm", link: "https://www.paris-pantheon.fr/en/", desc: "Mausoleum of heroes." }
                     ],
                     nature: [
                          { name: "Jardin des Tuileries", cost: "Free", hours: "7am-9pm", link: "https://en.parisinfo.com/", desc: "Central garden." },
-                         { name: "Buttes-Chaumont", cost: "Free", hours: "7am-8pm", link: "https://en.parisinfo.com/", desc: "Hillside park." }
+                         { name: "Buttes-Chaumont", cost: "Free", hours: "7am-8pm", link: "https://en.parisinfo.com/", desc: "Hillside park." },
+                         { name: "Promenade Plantée", cost: "Free", hours: "8am-Sunset", link: "https://en.parisinfo.com/", desc: "High line style park." }
                     ],
                     shopping: [
                         { name: "Galeries Lafayette", cost: "Free", hours: "10am-8pm", link: "https://haussmann.galerieslafayette.com/en/", desc: "Grand department store." },
-                        { name: "Le Marais Boutiques", cost: "Varied", hours: "11am-7pm", link: "https://en.parisinfo.com/", desc: "Trendy shopping." }
+                        { name: "Le Marais Boutiques", cost: "Varied", hours: "11am-7pm", link: "https://en.parisinfo.com/", desc: "Trendy shopping." },
+                        { name: "Shakespeare and Company", cost: "Free", hours: "10am-8pm", link: "https://shakespeareandcompany.com/", desc: "English bookstore." }
                     ],
                     adventure: [
                         { name: "Catacombs", cost: "€29", hours: "10am-8pm", link: "https://www.catacombes.paris.fr/en", desc: "Underground tunnels." },
-                        { name: "Eiffel Tower Summit", cost: "€28", hours: "9am-11pm", link: "https://www.toureiffel.paris/en", desc: "Top floor views." }
+                        { name: "Eiffel Tower Summit", cost: "€28", hours: "9am-11pm", link: "https://www.toureiffel.paris/en", desc: "Top floor views." },
+                        { name: "Ballon de Paris", cost: "€15", hours: "9am-9pm", link: "https://www.ballondeparis.com/", desc: "Hot air balloon ride." }
                     ],
                     relaxation: [
                         { name: "Jardin du Luxembourg", cost: "Free", hours: "Dawn-Dusk", link: "https://en.parisinfo.com/", desc: "Peaceful gardens." },
@@ -430,29 +444,34 @@
             },
             "las-vegas": {
                 name: "Las Vegas",
-                teams: [{ home: "Raiders", venue: "Allegiant Stadium", league: "NFL" }],
+                teams: [{ home: "Raiders", venue: "Allegiant Stadium", league: "NFL" }, { home: "Golden Knights", venue: "T-Mobile Arena", league: "NHL" }],
                 activities: {
                     culture: [
                         { name: "Cirque du Soleil", cost: "$100+", hours: "7pm/9pm", link: "https://www.cirquedusoleil.com/las-vegas", desc: "World-famous acrobatics." },
-                        { name: "Neon Museum", cost: "$20", hours: "2pm-10pm", link: "https://www.neonmuseum.org/", desc: "Vintage sign graveyard." }
+                        { name: "Neon Museum", cost: "$20", hours: "2pm-10pm", link: "https://www.neonmuseum.org/", desc: "Vintage sign graveyard." },
+                        { name: "Mob Museum", cost: "$30", hours: "9am-9pm", link: "https://themobmuseum.org/", desc: "Organized crime history." }
                     ],
                     food: [
                         { name: "Bacchanal Buffet", cost: "$80", hours: "9am-10pm", link: "https://www.caesars.com/caesars-palace/restaurants/bacchanal-buffet", desc: "Massive luxury buffet." },
                         { name: "Eataly Las Vegas", cost: "Varied", hours: "11am-11pm", link: "https://www.eataly.com/us_en/stores/las-vegas/", desc: "Italian marketplace." },
-                        { name: "Gordon Ramsay Burger", cost: "$25", hours: "11am-11pm", link: "https://www.gordonramsayrestaurants.com/", desc: "Gourmet burgers." }
+                        { name: "Gordon Ramsay Burger", cost: "$25", hours: "11am-11pm", link: "https://www.gordonramsayrestaurants.com/", desc: "Gourmet burgers." },
+                        { name: "Hell's Kitchen", cost: "$70", hours: "11am-11pm", link: "https://www.gordonramsayrestaurants.com/hells-kitchen-caesars-palace/", desc: "Famous TV restaurant." }
                     ],
                     nature: [
                         { name: "Red Rock Canyon", cost: "$15", hours: "8am-5pm", link: "https://www.redrockcanyonlv.org/", desc: "Desert hiking nearby." },
-                        { name: "Valley of Fire", cost: "$10", hours: "Sunrise-Sunset", link: "http://parks.nv.gov/parks/valley-of-fire", desc: "Red sandstone formations." }
+                        { name: "Valley of Fire", cost: "$10", hours: "Sunrise-Sunset", link: "http://parks.nv.gov/parks/valley-of-fire", desc: "Red sandstone formations." },
+                        { name: "Springs Preserve", cost: "$10", hours: "9am-4pm", link: "https://www.springspreserve.org/", desc: "Botanical gardens." }
                     ],
                     adventure: [
                         { name: "High Roller Wheel", cost: "$30", hours: "12pm-12am", link: "https://www.caesars.com/linq/high-roller", desc: "Giant observation wheel." },
                         { name: "SlotZilla Zip Line", cost: "$40+", hours: "1pm-1am", link: "https://vegasexperience.com/slotzilla-zip-line/", desc: "Fly over Fremont St." },
-                        { name: "Big Apple Coaster", cost: "$19", hours: "11am-11pm", link: "https://newyorknewyork.mgmresorts.com/", desc: "Roller coaster on the strip." }
+                        { name: "Big Apple Coaster", cost: "$19", hours: "11am-11pm", link: "https://newyorknewyork.mgmresorts.com/", desc: "Roller coaster on the strip." },
+                        { name: "Stratosphere Jump", cost: "$130", hours: "10am-1am", link: "https://thestrat.com/attractions", desc: "Jump off a tower." }
                     ],
                     relaxation: [
                         { name: "Bellagio Fountains", cost: "Free", hours: "3pm-12am", link: "https://bellagio.mgmresorts.com/", desc: "Water show set to music." },
-                        { name: "Mandalay Bay Beach", cost: "Entry varies", hours: "9am-6pm", link: "https://mandalaybay.mgmresorts.com/", desc: "Wave pool and beach." }
+                        { name: "Mandalay Bay Beach", cost: "Entry varies", hours: "9am-6pm", link: "https://mandalaybay.mgmresorts.com/", desc: "Wave pool and beach." },
+                        { name: "Shark Reef Aquarium", cost: "$29", hours: "10am-8pm", link: "https://mandalaybay.mgmresorts.com/", desc: "Walk through shark tunnel." }
                     ],
                     shopping: [
                          { name: "Forum Shops", cost: "Varied", hours: "10am-9pm", link: "https://www.simon.com/mall/the-forum-shops-at-caesars-palace", desc: "High-end mall." },
@@ -471,17 +490,20 @@
                     culture: [
                         { name: "Pearl Harbor", cost: "Free", hours: "7am-5pm", link: "https://www.nps.gov/valr/index.htm", desc: "Historic memorial site." },
                         { name: "Iolani Palace", cost: "$25", hours: "9am-4pm", link: "https://www.iolanipalace.org/", desc: "Royal residence." },
-                        { name: "Bishop Museum", cost: "$25", hours: "9am-5pm", link: "https://www.bishopmuseum.org/", desc: "Hawaiian history." }
+                        { name: "Bishop Museum", cost: "$25", hours: "9am-5pm", link: "https://www.bishopmuseum.org/", desc: "Hawaiian history." },
+                        { name: "Polynesian Cultural Ctr", cost: "$70", hours: "12pm-9pm", link: "https://www.polynesia.com/", desc: "Living museum." }
                     ],
                     food: [
                         { name: "Leonard's Bakery", cost: "$5", hours: "5am-10pm", link: "https://www.leonardshawaii.com/", desc: "Famous for Malasadas." },
                         { name: "Duke's Waikiki", cost: "$30", hours: "7am-11pm", link: "https://www.dukeswaikiki.com/", desc: "Beachfront dining." },
-                        { name: "Giovanni's Shrimp", cost: "$15", hours: "10am-5pm", link: "http://giovannisshrimptruck.com/", desc: "Famous shrimp truck." }
+                        { name: "Giovanni's Shrimp", cost: "$15", hours: "10am-5pm", link: "http://giovannisshrimptruck.com/", desc: "Famous shrimp truck." },
+                        { name: "Matsumoto Shave Ice", cost: "$5", hours: "9am-6pm", link: "https://matsumotoshaveice.com/", desc: "Iconic North Shore treat." }
                     ],
                     nature: [
                         { name: "Diamond Head", cost: "$5", hours: "6am-6pm", link: "https://dlnr.hawaii.gov/dsp/parks/oahu/diamond-head-state-monument/", desc: "Volcanic crater hike." },
                         { name: "Manoa Falls", cost: "Free", hours: "Sunrise-Sunset", link: "https://dlnr.hawaii.gov/", desc: "Rainforest waterfall hike." },
-                        { name: "Hanauma Bay", cost: "$25", hours: "7am-4pm", link: "https://www.hanaumabaystatepark.com/", desc: "Snorkeling preserve." }
+                        { name: "Hanauma Bay", cost: "$25", hours: "7am-4pm", link: "https://www.hanaumabaystatepark.com/", desc: "Snorkeling preserve." },
+                        { name: "Kualoa Ranch", cost: "$50", hours: "8am-5:30pm", link: "https://www.kualoa.com/", desc: "Jurassic Park filming site." }
                     ],
                     relaxation: [
                         { name: "Waikiki Beach", cost: "Free", hours: "24h", link: "https://www.gohawaii.com/", desc: "Iconic surfing beach." },
@@ -493,39 +515,260 @@
                     ],
                     adventure: [
                         { name: "Surf Lessons", cost: "$100", hours: "Morning", link: "https://www.waikikibeachservices.com/", desc: "Learn to surf." },
-                        { name: "Parasailing", cost: "$90", hours: "9am-5pm", link: "https://h2osportshawaii.com/", desc: "Fly over the ocean." }
+                        { name: "Parasailing", cost: "$90", hours: "9am-5pm", link: "https://h2osportshawaii.com/", desc: "Fly over the ocean." },
+                        { name: "Shark Cage Dive", cost: "$120", hours: "Morning", link: "https://sharktourshawaii.com/", desc: "Swim with sharks safely." }
+                    ]
+                }
+            },
+            "london": {
+                name: "London",
+                teams: [{ home: "Arsenal", venue: "Emirates", league: "Premier League" }, { home: "Chelsea", venue: "Stamford Bridge", league: "PL" }],
+                activities: {
+                    culture: [
+                        { name: "British Museum", cost: "Free", hours: "10am-5pm", link: "https://www.britishmuseum.org/", desc: "Human history." },
+                        { name: "Tower of London", cost: "£33", hours: "9am-5:30pm", link: "https://www.hrp.org.uk/tower-of-london/", desc: "Crown Jewels." },
+                        { name: "Tate Modern", cost: "Free", hours: "10am-6pm", link: "https://www.tate.org.uk/", desc: "Modern art." },
+                        { name: "Natural History Museum", cost: "Free", hours: "10am-5:50pm", link: "https://www.nhm.ac.uk/", desc: "Dinosaurs and more." }
+                    ],
+                    food: [
+                        { name: "Borough Market", cost: "Free Entry", hours: "10am-5pm", link: "https://boroughmarket.org.uk/", desc: "Gourmet food market." },
+                        { name: "Dishoom", cost: "£30", hours: "8am-11pm", link: "https://www.dishoom.com/", desc: "Famous Indian dining." },
+                        { name: "Afternoon Tea at The Ritz", cost: "£70", hours: "11:30am-7:30pm", link: "https://www.theritzlondon.com/", desc: "Classic British tea." },
+                        { name: "Camden Market", cost: "Varied", hours: "10am-6pm", link: "https://www.camdenmarket.com/", desc: "Street food & stalls." }
+                    ],
+                    nature: [
+                        { name: "Hyde Park", cost: "Free", hours: "5am-12am", link: "https://www.royalparks.org.uk/", desc: "Large central park." },
+                        { name: "Kew Gardens", cost: "£19.50", hours: "10am-7pm", link: "https://www.kew.org/", desc: "Royal botanical gardens." },
+                        { name: "Regent's Park", cost: "Free", hours: "5am-Dusk", link: "https://www.royalparks.org.uk/", desc: "Beautiful rose gardens." }
+                    ],
+                    shopping: [
+                        { name: "Harrods", cost: "Varied", hours: "10am-9pm", link: "https://www.harrods.com/", desc: "Luxury department store." },
+                        { name: "Oxford Street", cost: "Varied", hours: "10am-9pm", link: "https://www.oxfordstreet.co.uk/", desc: "High street fashion." },
+                        { name: "Liberty London", cost: "Varied", hours: "10am-8pm", link: "https://www.libertylondon.com/", desc: "Tudor-style store." }
+                    ],
+                    adventure: [
+                        { name: "London Eye", cost: "£28", hours: "11am-6pm", link: "https://www.londoneye.com/", desc: "Giant ferris wheel." },
+                        { name: "Up at The O2", cost: "£35", hours: "10am-8pm", link: "https://www.theo2.co.uk/", desc: "Climb the O2 arena." },
+                        { name: "Thames Rocket", cost: "£45", hours: "10am-6pm", link: "https://www.thamesrockets.com/", desc: "Speedboat tour." }
+                    ]
+                }
+            },
+            "tokyo": {
+                name: "Tokyo",
+                teams: [{ home: "Yomiuri Giants", venue: "Tokyo Dome", league: "Baseball" }],
+                activities: {
+                    culture: [
+                        { name: "Senso-ji Temple", cost: "Free", hours: "6am-5pm", link: "https://www.senso-ji.jp/english/", desc: "Ancient Buddhist temple." },
+                        { name: "teamLab Planets", cost: "¥3200", hours: "10am-8pm", link: "https://planets.teamlab.art/", desc: "Digital art museum." },
+                        { name: "Meiji Shrine", cost: "Free", hours: "Sunrise-Sunset", link: "https://www.meijijingu.or.jp/en/", desc: "Shinto shrine in forest." },
+                        { name: "Ghibli Museum", cost: "¥1000", hours: "10am-6pm", link: "https://www.ghibli-museum.jp/en/", desc: "Anime magic (Book ahead)." }
+                    ],
+                    food: [
+                        { name: "Tsukiji Outer Market", cost: "Varied", hours: "5am-2pm", link: "https://www.tsukiji.or.jp/", desc: "Fresh sushi & seafood." },
+                        { name: "Ichiran Ramen", cost: "¥980", hours: "24h", link: "https://en.ichiran.com/", desc: "Solo ramen booths." },
+                        { name: "Harajuku Crepes", cost: "¥500", hours: "10am-8pm", link: "https://www.gotokyo.org/", desc: "Sweet street treats." },
+                        { name: "Omoide Yokocho", cost: "Varied", hours: "5pm-12am", link: "http://shinjuku-omoide.com/", desc: "Yakitori alley." }
+                    ],
+                    shopping: [
+                        { name: "Ginza Six", cost: "Varied", hours: "10:30am-8:30pm", link: "https://ginza6.tokyo/", desc: "Luxury shopping." },
+                        { name: "Akihabara", cost: "Varied", hours: "10am-8pm", link: "https://akihabara-japan.com/", desc: "Electronics & Anime." },
+                        { name: "Shibuya Parco", cost: "Varied", hours: "11am-9pm", link: "https://shibuya.parco.jp/", desc: "Nintendo & Pokemon stores." }
+                    ],
+                    adventure: [
+                        { name: "Tokyo Skytree", cost: "¥2100", hours: "10am-9pm", link: "https://www.tokyo-skytree.jp/en/", desc: "Tallest tower views." },
+                        { name: "Go-Kart Tour", cost: "¥10000", hours: "Day/Night", link: "https://kart.st/", desc: "Drive on streets in costume." },
+                        { name: "Tokyo DisneySea", cost: "¥8400", hours: "9am-9pm", link: "https://www.tokyodisneyresort.jp/en/", desc: "Unique theme park." }
+                    ],
+                    nature: [
+                        { name: "Shinjuku Gyoen", cost: "¥500", hours: "9am-4pm", link: "https://fng.or.jp/shinjuku/en/", desc: "Beautiful city garden." },
+                        { name: "Yoyogi Park", cost: "Free", hours: "24h", link: "https://www.tokyo-park.or.jp/", desc: "Relaxing green space." }
+                    ]
+                }
+            },
+            "rome": {
+                name: "Rome",
+                teams: [{ home: "AS Roma", venue: "Stadio Olimpico", league: "Serie A" }],
+                activities: {
+                    culture: [
+                        { name: "Colosseum", cost: "€16", hours: "8:30am-7pm", link: "https://parcocolosseo.it/en/", desc: "Ancient gladiator arena." },
+                        { name: "Vatican Museums", cost: "€17", hours: "9am-6pm", link: "https://m.museivaticani.va/", desc: "Sistine Chapel." },
+                        { name: "Pantheon", cost: "€5", hours: "9am-7pm", link: "https://www.pantheonroma.com/", desc: "Ancient temple." },
+                        { name: "Trevi Fountain", cost: "Free", hours: "24h", link: "https://www.turismoroma.it/", desc: "Baroque masterpiece." }
+                    ],
+                    food: [
+                        { name: "Mercato Centrale", cost: "Varied", hours: "8am-12am", link: "https://www.mercatocentrale.com/rome/", desc: "Food hall at station." },
+                        { name: "Giolitti Gelato", cost: "€4", hours: "7am-1am", link: "https://www.giolitti.it/", desc: "Historic gelato." },
+                        { name: "Bonci Pizzarium", cost: "€10", hours: "11am-9pm", link: "https://www.bonci.it/", desc: "Famous pizza al taglio." }
+                    ],
+                    history: [
+                        { name: "Roman Forum", cost: "Inc. w/ Colosseum", hours: "8:30am-7pm", link: "https://parcocolosseo.it/", desc: "Heart of ancient Rome." },
+                        { name: "Castel Sant'Angelo", cost: "€15", hours: "9am-7:30pm", link: "http://castelsantangelo.beniculturali.it/", desc: "Mausoleum fortress." }
+                    ],
+                    adventure: [
+                         { name: "Vespa Tour", cost: "€100", hours: "Varied", link: "https://www.viator.com/", desc: "Ride like a local." },
+                         { name: "Catacombs of Callixtus", cost: "€8", hours: "9am-5pm", link: "https://www.catacombe.roma.it/", desc: "Underground burial site." }
+                    ]
+                }
+            },
+            "barcelona": {
+                name: "Barcelona",
+                teams: [{ home: "FC Barcelona", venue: "Camp Nou", league: "La Liga" }],
+                activities: {
+                    culture: [
+                        { name: "Sagrada Familia", cost: "€26", hours: "9am-6pm", link: "https://sagradafamilia.org/", desc: "Gaudi's masterpiece." },
+                        { name: "Park Guell", cost: "€10", hours: "9:30am-7:30pm", link: "https://parkguell.barcelona/", desc: "Mosaic park." },
+                        { name: "Casa Batllo", cost: "€35", hours: "9am-8pm", link: "https://www.casabatllo.es/", desc: "Modernist architecture." }
+                    ],
+                    food: [
+                        { name: "La Boqueria", cost: "Free Entry", hours: "8am-8:30pm", link: "http://www.boqueria.barcelona/", desc: "Famous food market." },
+                        { name: "El Xampanyet", cost: "€15", hours: "12pm-11pm", link: "https://www.elxampanyet.es/", desc: "Tapas & sparkling wine." },
+                        { name: "Churrería Laietana", cost: "€5", hours: "7am-1pm", link: "#", desc: "Best churros." }
+                    ],
+                    nature: [
+                        { name: "Barceloneta Beach", cost: "Free", hours: "24h", link: "https://www.barcelona.cat/", desc: "City beach." },
+                        { name: "Ciutadella Park", cost: "Free", hours: "10am-10pm", link: "https://www.barcelona.cat/", desc: "Green park with lake." }
+                    ],
+                    adventure: [
+                        { name: "Montjuic Cable Car", cost: "€13.50", hours: "10am-6pm", link: "https://www.telefericdemontjuic.cat/", desc: "Aerial city views." },
+                        { name: "Tibidabo Amusement Park", cost: "€35", hours: "11am-9pm", link: "https://www.tibidabo.cat/", desc: "Retro theme park with views." }
+                    ]
+                }
+            },
+            "amsterdam": {
+                name: "Amsterdam",
+                teams: [{ home: "Ajax", venue: "Johan Cruijff Arena", league: "Eredivisie" }],
+                activities: {
+                    culture: [
+                         { name: "Rijksmuseum", cost: "€22.50", hours: "9am-5pm", link: "https://www.rijksmuseum.nl/", desc: "Dutch Golden Age art." },
+                         { name: "Van Gogh Museum", cost: "€20", hours: "9am-6pm", link: "https://www.vangoghmuseum.nl/", desc: "Van Gogh's works." },
+                         { name: "Anne Frank House", cost: "€16", hours: "9am-10pm", link: "https://www.annefrank.org/", desc: "Historic hiding place." }
+                    ],
+                    food: [
+                        { name: "Foodhallen", cost: "Varied", hours: "12pm-11pm", link: "https://foodhallen.nl/", desc: "Indoor food market." },
+                        { name: "Pancake Bakery", cost: "€15", hours: "9am-9pm", link: "https://pancake.nl/", desc: "Traditional Dutch pancakes." },
+                        { name: "Albert Cuyp Market", cost: "Free", hours: "9am-5pm", link: "https://albertcuyp-markt.amsterdam/", desc: "Street market stroopwafels." }
+                    ],
+                    adventure: [
+                        { name: "Canal Cruise", cost: "€15", hours: "10am-9pm", link: "https://www.stromma.com/", desc: "Boat tour." },
+                        { name: "A'DAM Lookout", cost: "€16", hours: "10am-10pm", link: "https://www.adamlookout.com/", desc: "Swing over the edge." },
+                        { name: "Heineken Experience", cost: "€21", hours: "10:30am-7:30pm", link: "https://www.heinekenexperience.com/", desc: "Brewery tour (18+)." }
+                    ]
+                }
+            },
+            "sydney": {
+                name: "Sydney",
+                teams: [{ home: "Sydney Swans", venue: "SCG", league: "AFL" }],
+                activities: {
+                    culture: [
+                         { name: "Opera House", cost: "Varied", hours: "9am-5pm", link: "https://www.sydneyoperahouse.com/", desc: "Iconic architecture." },
+                         { name: "Art Gallery NSW", cost: "Free", hours: "10am-5pm", link: "https://www.artgallery.nsw.gov.au/", desc: "Australian art." }
+                    ],
+                    nature: [
+                        { name: "Bondi Beach", cost: "Free", hours: "24h", link: "https://www.bondivillage.com/", desc: "Famous surf beach." },
+                        { name: "Royal Botanic Garden", cost: "Free", hours: "7am-Sunset", link: "https://www.rbgsyd.nsw.gov.au/", desc: "Harbour views." },
+                        { name: "Taronga Zoo", cost: "$49", hours: "9:30am-5pm", link: "https://taronga.org.au/sydney-zoo", desc: "Zoo with a view." }
+                    ],
+                    adventure: [
+                        { name: "Harbour Bridge Climb", cost: "$300+", hours: "Dawn-Dusk", link: "https://www.bridgeclimb.com/", desc: "Climb the arch." },
+                        { name: "Manly Ferry", cost: "$8", hours: "6am-12am", link: "https://transportnsw.info/", desc: "Scenic boat ride." }
+                    ]
+                }
+            },
+            "dubai": {
+                name: "Dubai",
+                teams: [],
+                activities: {
+                    culture: [
+                        { name: "Burj Khalifa", cost: "AED 169", hours: "10am-11pm", link: "https://www.burjkhalifa.ae/", desc: "Tallest building." },
+                        { name: "Museum of the Future", cost: "AED 145", hours: "10am-6pm", link: "https://museumofthefuture.ae/", desc: "Futuristic exhibits." },
+                        { name: "Dubai Frame", cost: "AED 50", hours: "9am-9pm", link: "https://www.dubaiframe.ae/", desc: "City views." }
+                    ],
+                    adventure: [
+                        { name: "Desert Safari", cost: "AED 150", hours: "3pm-9pm", link: "https://www.visitdubai.com/", desc: "Dune bashing & BBQ." },
+                        { name: "Aquaventure Waterpark", cost: "AED 299", hours: "10am-6pm", link: "https://www.atlantis.com/", desc: "Huge water slides." },
+                        { name: "Sky Views Dubai", cost: "AED 85", hours: "10am-10pm", link: "https://www.skyviewsdubai.com/", desc: "Glass slide." }
+                    ],
+                    shopping: [
+                        { name: "Dubai Mall", cost: "Free", hours: "10am-12am", link: "https://thedubaimall.com/", desc: "Massive mall." },
+                        { name: "Gold Souk", cost: "Free", hours: "10am-10pm", link: "https://www.visitdubai.com/", desc: "Traditional market." }
+                    ]
+                }
+            },
+            "bangkok": {
+                name: "Bangkok",
+                teams: [],
+                activities: {
+                    culture: [
+                        { name: "Grand Palace", cost: "฿500", hours: "8:30am-3:30pm", link: "https://www.royalgrandpalace.th/", desc: "Opulent royal complex." },
+                        { name: "Wat Arun", cost: "฿100", hours: "8am-6pm", link: "https://www.tourismthailand.org/", desc: "Riverside temple." },
+                        { name: "Wat Pho", cost: "฿200", hours: "8am-6:30pm", link: "https://www.watpho.com/", desc: "Reclining Buddha." }
+                    ],
+                    food: [
+                        { name: "Chinatown Street Food", cost: "Cheap", hours: "6pm-12am", link: "https://www.tourismthailand.org/", desc: "Best street eats." },
+                        { name: "Jay Fai", cost: "฿1000+", hours: "9am-8pm", link: "https://guide.michelin.com/", desc: "Michelin crab omelette." },
+                        { name: "Chatuchak Market", cost: "Free", hours: "Weekends", link: "https://www.chatuchakmarket.org/", desc: "Massive weekend market." }
+                    ],
+                    adventure: [
+                        { name: "Longtail Boat", cost: "฿1500", hours: "Daytime", link: "https://www.tourismthailand.org/", desc: "Canal tour." },
+                        { name: "Tuk Tuk Ride", cost: "Negotiable", hours: "Anytime", link: "#", desc: "Fast & fun transport." }
+                    ]
+                }
+            },
+             "capetown": {
+                name: "Cape Town",
+                teams: [{ home: "Stormers", venue: "DHL Stadium", league: "Rugby" }],
+                activities: {
+                    nature: [
+                        { name: "Table Mountain", cost: "R380", hours: "8am-6pm", link: "https://tablemountain.net/", desc: "Cable car views." },
+                        { name: "Kirstenbosch Gardens", cost: "R200", hours: "8am-7pm", link: "https://www.sanbi.org/", desc: "Botanical gardens." },
+                        { name: "Boulders Beach", cost: "R170", hours: "8am-5pm", link: "https://www.sanparks.org/", desc: "Penguin colony." }
+                    ],
+                    history: [
+                        { name: "Robben Island", cost: "R600", hours: "9am-3pm", link: "http://www.robben-island.org.za/", desc: "Mandela's prison." },
+                        { name: "District Six Museum", cost: "R50", hours: "9am-4pm", link: "https://www.districtsix.co.za/", desc: "Apartheid history." }
+                    ],
+                    adventure: [
+                        { name: "Shark Cage Dive", cost: "R2500", hours: "Morning", link: "https://www.sharkcagediving.co.za/", desc: "Great White sharks." },
+                        { name: "Paragliding", cost: "R1300", hours: "Weather dependent", link: "https://flycapetown.co.za/", desc: "Fly off Signal Hill." }
+                    ]
+                }
+            },
+            "rio": {
+                name: "Rio de Janeiro",
+                teams: [{ home: "Flamengo", venue: "Maracana", league: "Serie A" }],
+                activities: {
+                    culture: [
+                        { name: "Christ the Redeemer", cost: "R$100", hours: "8am-7pm", link: "https://tremdocorcovado.rio/", desc: "Iconic statue." },
+                        { name: "Selaron Steps", cost: "Free", hours: "24h", link: "#", desc: "Colorful tile stairs." }
+                    ],
+                    nature: [
+                        { name: "Sugarloaf Mountain", cost: "R$130", hours: "8am-9pm", link: "https://bondinho.com.br/", desc: "Cable car views." },
+                        { name: "Copacabana Beach", cost: "Free", hours: "24h", link: "https://visitbrasil.com/", desc: "Famous beach." },
+                        { name: "Ipanema Beach", cost: "Free", hours: "24h", link: "https://visitbrasil.com/", desc: "Trendy beach." }
+                    ],
+                    adventure: [
+                        { name: "Hang Gliding", cost: "R$600", hours: "8am-4pm", link: "https://www.rio-hanggliding.com/", desc: "Fly over the beach." }
                     ]
                 }
             },
             "toronto": {
                 name: "Toronto",
-                teams: [{ home: "Blue Jays", venue: "Rogers Centre", league: "MLB" }],
+                teams: [{ home: "Blue Jays", venue: "Rogers Centre", league: "MLB" }, { home: "Raptors", venue: "Scotiabank Arena", league: "NBA" }],
                 activities: {
                     culture: [
                         { name: "CN Tower", cost: "$45", hours: "9am-9pm", link: "https://www.cntower.ca/", desc: "Iconic skyline views." },
-                        { name: "Royal Ontario Museum", cost: "$23", hours: "10am-5:30pm", link: "https://www.rom.on.ca/en", desc: "Art, culture, and nature." },
-                        { name: "Art Gallery of Ontario", cost: "$25", hours: "10:30am-5pm", link: "https://ago.ca/", desc: "Large art museum." }
+                        { name: "Royal Ontario Museum", cost: "$23", hours: "10am-5:30pm", link: "https://www.rom.on.ca/", desc: "Art & natural history." },
+                        { name: "Casa Loma", cost: "$30", hours: "9:30am-5pm", link: "https://casaloma.ca/", desc: "Historic castle." }
                     ],
                     food: [
-                        { name: "St. Lawrence Market", cost: "Free Entry", hours: "9am-5pm", link: "http://www.stlawrencemarket.com/", desc: "Historic food market." },
-                        { name: "Kensington Market", cost: "Free", hours: "10am-7pm", link: "https://kensington-market.ca/", desc: "Eclectic food neighborhood." },
-                        { name: "Distillery District", cost: "Varied", hours: "10am-9pm", link: "https://www.thedistillerydistrict.com/", desc: "Dining in historic buildings." }
-                    ],
-                    history: [
-                        { name: "Casa Loma", cost: "$30", hours: "9:30am-5pm", link: "https://casaloma.ca/", desc: "Gothic revival castle." },
-                        { name: "Fort York", cost: "$14", hours: "10am-4pm", link: "https://www.toronto.ca/fort-york/", desc: "War of 1812 site." }
-                    ],
-                    nature: [
-                        { name: "Toronto Islands", cost: "$9 (Ferry)", hours: "8am-11pm", link: "https://www.toronto.ca/islands/", desc: "Parkland accessible by ferry." },
-                        { name: "High Park", cost: "Free", hours: "24h", link: "https://www.highparktoronto.com/", desc: "Large park with zoo." }
-                    ],
-                    shopping: [
-                        { name: "Eaton Centre", cost: "Varied", hours: "10am-9pm", link: "https://www.cfshops.com/toronto-eaton-centre.html", desc: "Massive downtown mall." },
-                        { name: "Yorkville", cost: "Varied", hours: "10am-6pm", link: "https://www.bloor-yorkville.com/", desc: "Luxury shopping district." }
+                        { name: "St. Lawrence Market", cost: "Free", hours: "9am-5pm", link: "http://www.stlawrencemarket.com/", desc: "Top food market." },
+                        { name: "Kensington Market", cost: "Free", hours: "11am-7pm", link: "https://kensington-market.ca/", desc: "Eclectic food neighborhood." },
+                        { name: "Distillery District", cost: "Varied", hours: "10am-9pm", link: "https://www.thedistillerydistrict.com/", desc: "Dining & shopping." }
                     ],
                     adventure: [
-                        { name: "EdgeWalk", cost: "$195", hours: "Seasonal", link: "https://www.cntower.ca/edgewalk", desc: "Walk outside the CN Tower." },
-                        { name: "Ripley's Aquarium", cost: "$44", hours: "9am-9pm", link: "https://www.ripleyaquariums.com/canada/", desc: "Walk-through shark tunnel." }
+                        { name: "EdgeWalk", cost: "$195", hours: "Seasonal", link: "https://www.cntower.ca/edgewalk", desc: "Hands-free tower walk." },
+                        { name: "Ripley's Aquarium", cost: "$44", hours: "9am-9pm", link: "https://www.ripleyaquariums.com/canada/", desc: "Shark tunnel." },
+                        { name: "Toronto Islands", cost: "$9 Ferry", hours: "8am-11pm", link: "https://www.toronto.ca/islands/", desc: "Park & beach." }
                     ]
                 }
             },
@@ -533,74 +776,132 @@
                 name: "Berlin",
                 teams: [{ home: "Hertha BSC", venue: "Olympiastadion", league: "Bundesliga" }],
                 activities: {
-                    culture: [
-                        { name: "Museum Island", cost: "€19", hours: "10am-6pm", link: "https://www.smb.museum/", desc: "UNESCO World Heritage site." },
-                        { name: "East Side Gallery", cost: "Free", hours: "24h", link: "https://www.eastsidegallery-berlin.com/", desc: "Art on the Berlin Wall." },
-                        { name: "Reichstag Building", cost: "Free (Book ahead)", hours: "8am-12am", link: "https://www.bundestag.de/en/visitthebundestag", desc: "Glass dome views." }
-                    ],
                     history: [
-                        { name: "Brandenburg Gate", cost: "Free", hours: "24h", link: "https://www.berlin.de/en/", desc: "Symbol of unity." },
-                        { name: "Checkpoint Charlie", cost: "Free", hours: "24h", link: "https://www.berlin.de/en/attractions/", desc: "Cold War crossing point." },
-                        { name: "Memorial to Jews", cost: "Free", hours: "24h", link: "https://www.stiftung-denkmal.de/en/", desc: "Holocaust memorial." }
+                        { name: "Berlin Wall Memorial", cost: "Free", hours: "8am-10pm", link: "https://www.berliner-mauer-gedenkstaette.de/", desc: "Cold War history." },
+                        { name: "Brandenburg Gate", cost: "Free", hours: "24h", link: "https://www.berlin.de/", desc: "Iconic landmark." },
+                        { name: "Reichstag Dome", cost: "Free (Book)", hours: "8am-12am", link: "https://www.bundestag.de/", desc: "Parliament views." }
                     ],
-                    food: [
-                        { name: "Curry 36", cost: "€5", hours: "9am-5am", link: "https://curry36.de/", desc: "Famous Currywurst." },
-                        { name: "Markthalle Neun", cost: "Free Entry", hours: "Varied", link: "https://markthalleneun.de/", desc: "Street food market." }
+                    culture: [
+                        { name: "Museum Island", cost: "€19", hours: "10am-6pm", link: "https://www.smb.museum/", desc: "World-class museums." },
+                        { name: "East Side Gallery", cost: "Free", hours: "24h", link: "https://www.eastsidegallery-berlin.com/", desc: "Wall art." }
                     ],
-                    nature: [
-                         { name: "Tiergarten", cost: "Free", hours: "24h", link: "https://www.berlin.de/en/parks-and-gardens/", desc: "Central massive park." },
-                         { name: "Tempelhofer Feld", cost: "Free", hours: "6am-Sunset", link: "https://gruen-berlin.de/tempelhofer-feld", desc: "Park on old airport." }
-                    ],
-                    shopping: [
-                         { name: "Kurfürstendamm", cost: "Varied", hours: "10am-8pm", link: "https://www.visitberlin.de/en", desc: "Famous shopping avenue." },
-                         { name: "KaDeWe", cost: "Varied", hours: "10am-8pm", link: "https://www.kadewe.de/", desc: "Luxury department store." }
-                    ],
-                    nightlife: [
-                        { name: "Berghain", cost: "€25", hours: "Late", link: "https://www.berghain.berlin/", desc: "World famous techno club (Adults)." },
-                        { name: "Prater Beer Garden", cost: "Varied", hours: "12pm-11pm", link: "https://www.pratergarten.de/", desc: "Oldest beer garden." }
+                    adventure: [
+                        { name: "TV Tower", cost: "€25", hours: "10am-10pm", link: "https://tv-turm.de/", desc: "360 city views." },
+                        { name: "Tempelhofer Feld", cost: "Free", hours: "Sunrise-Sunset", link: "https://gruen-berlin.de/", desc: "Park on airport runway." }
                     ]
                 }
             },
-            "seoul": {
+             "seoul": {
                 name: "Seoul",
                 teams: [],
                 activities: {
                     culture: [
-                        { name: "Gyeongbokgung Palace", cost: "₩3,000", hours: "9am-5pm", link: "http://www.royalpalace.go.kr/", desc: "Main royal palace." },
-                        { name: "Bukchon Hanok Village", cost: "Free", hours: "9am-5pm", link: "https://english.visitkorea.or.kr/", desc: "Traditional houses." },
-                        { name: "N Seoul Tower", cost: "₩16,000", hours: "10am-11pm", link: "https://www.nseoultower.co.kr/eng/", desc: "City views." }
+                        { name: "Gyeongbokgung Palace", cost: "₩3000", hours: "9am-5pm", link: "http://www.royalpalace.go.kr/", desc: "Main royal palace." },
+                        { name: "Bukchon Hanok Village", cost: "Free", hours: "9am-5pm", link: "https://english.visitkorea.or.kr/", desc: "Traditional houses." }
                     ],
                     food: [
-                        { name: "Myeongdong Street Food", cost: "Cheap", hours: "5pm-11pm", link: "https://english.visitkorea.or.kr/", desc: "Diverse street snacks." },
-                        { name: "Gwangjang Market", cost: "Cheap", hours: "9am-6pm", link: "https://english.visitkorea.or.kr/", desc: "Traditional food market." },
-                        { name: "Korean BBQ", cost: "₩30,000+", hours: "Evening", link: "#", desc: "Grill your own meat." }
-                    ],
-                    shopping: [
-                        { name: "Dongdaemun Design Plaza", cost: "Free", hours: "10am-9pm", link: "https://ddp.or.kr/", desc: "Futuristic design hub." },
-                        { name: "Hongdae", cost: "Varied", hours: "10am-10pm", link: "https://english.visitkorea.or.kr/", desc: "Youth fashion & art." },
-                        { name: "Starfield COEX Mall", cost: "Varied", hours: "10:30am-10pm", link: "https://www.starfield.co.kr/coexmall/main.do", desc: "Giant underground mall." }
-                    ],
-                    nature: [
-                         { name: "Cheonggyecheon Stream", cost: "Free", hours: "24h", link: "https://english.visitkorea.or.kr/", desc: "Urban stream walk." },
-                         { name: "Han River Park", cost: "Free", hours: "24h", link: "https://english.visitkorea.or.kr/", desc: "Riverside picnics." }
+                        { name: "Gwangjang Market", cost: "Cheap", hours: "9am-11pm", link: "https://english.visitkorea.or.kr/", desc: "Street food heaven." },
+                        { name: "Myeongdong Street", cost: "Varied", hours: "4pm-11pm", link: "#", desc: "Shopping & snacks." }
                     ],
                     adventure: [
-                         { name: "Lotte World", cost: "₩59,000", hours: "10am-9pm", link: "https://www.lotteworld.com/", desc: "Indoor theme park." }
+                        { name: "N Seoul Tower", cost: "₩16000", hours: "10am-11pm", link: "https://www.nseoultower.co.kr/", desc: "City views." },
+                        { name: "Lotte World", cost: "₩62000", hours: "10am-10pm", link: "https://www.lotteworld.com/", desc: "Indoor theme park." }
+                    ]
+                }
+            },
+            "los-angeles": {
+                name: "Los Angeles",
+                teams: [{ home: "Lakers", venue: "Crypto.com Arena", league: "NBA" }, { home: "Dodgers", venue: "Dodger Stadium", league: "MLB" }],
+                activities: {
+                    culture: [
+                        { name: "Getty Center", cost: "Free", hours: "10am-5:30pm", link: "https://www.getty.edu/", desc: "Art & views." },
+                        { name: "Griffith Observatory", cost: "Free", hours: "12pm-10pm", link: "https://griffithobservatory.org/", desc: "Space & Hollywood sign." },
+                        { name: "LACMA", cost: "$25", hours: "11am-6pm", link: "https://www.lacma.org/", desc: "Modern art & lights." }
                     ],
-                    relaxation: [
-                        { name: "Dragon Hill Spa", cost: "₩15,000", hours: "24h", link: "https://www.dragonhillspa.com/", desc: "Traditional Jimjilbang." }
+                    adventure: [
+                        { name: "Universal Studios", cost: "$109+", hours: "9am-7pm", link: "https://www.universalstudioshollywood.com/", desc: "Movies & rides." },
+                        { name: "Warner Bros Tour", cost: "$70", hours: "8:30am-3:30pm", link: "https://www.wbstudiotour.com/", desc: "Studio sets." },
+                        { name: "Santa Monica Pier", cost: "Free Entry", hours: "6am-10pm", link: "https://santamonicapier.org/", desc: "Ferris wheel & beach." }
+                    ],
+                    nature: [
+                        { name: "Runyon Canyon", cost: "Free", hours: "Sunrise-Sunset", link: "https://laparks.org/", desc: "Hiking & views." },
+                        { name: "Venice Beach", cost: "Free", hours: "24h", link: "https://www.laparks.org/venice", desc: "Boardwalk & skatepark." }
+                    ]
+                }
+            },
+            "chicago": {
+                name: "Chicago",
+                teams: [{ home: "Bulls", venue: "United Center", league: "NBA" }, { home: "Cubs", venue: "Wrigley Field", league: "MLB" }],
+                activities: {
+                    culture: [
+                        { name: "Art Institute", cost: "$32", hours: "11am-5pm", link: "https://www.artic.edu/", desc: "Ferris Bueller's museum." },
+                        { name: "Field Museum", cost: "$30", hours: "9am-5pm", link: "https://www.fieldmuseum.org/", desc: "T-Rex Sue." },
+                        { name: "The Bean", cost: "Free", hours: "6am-11pm", link: "https://www.chicago.gov/", desc: "Cloud Gate sculpture." }
+                    ],
+                    food: [
+                        { name: "Lou Malnati's", cost: "$25", hours: "11am-11pm", link: "https://www.loumalnatis.com/", desc: "Deep dish pizza." },
+                        { name: "Portillo's", cost: "$10", hours: "10am-10pm", link: "https://www.portillos.com/", desc: "Italian beef & dogs." }
+                    ],
+                    adventure: [
+                        { name: "Skydeck Chicago", cost: "$35", hours: "9am-10pm", link: "https://theskydeck.com/", desc: "Ledge glass box." },
+                        { name: "Architecture Boat Tour", cost: "$50", hours: "Daytime", link: "https://www.cruisechicago.com/", desc: "River history." }
+                    ]
+                }
+            },
+            "san-francisco": {
+                name: "San Francisco",
+                teams: [{ home: "Warriors", venue: "Chase Center", league: "NBA" }, { home: "Giants", venue: "Oracle Park", league: "MLB" }],
+                activities: {
+                    culture: [
+                        { name: "Alcatraz", cost: "$45", hours: "8:45am-6:30pm", link: "https://www.nps.gov/alca/", desc: "Prison island tour." },
+                        { name: "Fisherman's Wharf", cost: "Free", hours: "24h", link: "https://www.fishermanswharf.org/", desc: "Sea lions & chowder." }
+                    ],
+                    adventure: [
+                        { name: "Golden Gate Bridge", cost: "Free", hours: "24h", link: "https://www.goldengate.org/", desc: "Walk or bike across." },
+                        { name: "Cable Cars", cost: "$8", hours: "7am-10pm", link: "https://www.sfmta.com/", desc: "Iconic ride." }
+                    ],
+                    nature: [
+                        { name: "Muir Woods", cost: "$15", hours: "8am-6pm", link: "https://www.nps.gov/muwo/", desc: "Redwood forest." },
+                        { name: "Golden Gate Park", cost: "Free", hours: "24h", link: "https://goldengatepark.com/", desc: "Museums & gardens." }
+                    ]
+                }
+            },
+            "miami": {
+                name: "Miami",
+                teams: [{ home: "Heat", venue: "Kaseya Center", league: "NBA" }, { home: "Dolphins", venue: "Hard Rock Stadium", league: "NFL" }],
+                activities: {
+                    culture: [
+                        { name: "Wynwood Walls", cost: "$12", hours: "11am-7pm", link: "https://thewynwoodwalls.com/", desc: "Street art museum." },
+                        { name: "Vizcaya Museum", cost: "$25", hours: "9:30am-4:30pm", link: "https://vizcaya.org/", desc: "Historic villa." }
+                    ],
+                    nature: [
+                        { name: "South Beach", cost: "Free", hours: "24h", link: "https://www.miamiandbeaches.com/", desc: "Art deco & ocean." },
+                        { name: "Everglades Tour", cost: "$30", hours: "9am-5pm", link: "https://www.evergladessafaripark.com/", desc: "Airboat & gators." }
+                    ],
+                    food: [
+                        { name: "Versailles", cost: "$20", hours: "8am-1am", link: "https://www.versaillesrestaurant.com/", desc: "Famous Cuban food." },
+                        { name: "Joe's Stone Crab", cost: "$50+", hours: "Seasonal", link: "https://joesstonecrab.com/", desc: "Legendary seafood." }
                     ]
                 }
             }
         };
         
-        // Populate missing properties for robust fallback
+        // Fallback populator
         Object.keys(db).forEach(city => {
-            if(!db[city].activities.history) db[city].activities.history = db[city].activities.culture;
-            if(!db[city].activities.relaxation) db[city].activities.relaxation = db[city].activities.nature;
-            if(!db[city].activities.adventure) db[city].activities.adventure = db[city].activities.nature;
-            if(!db[city].activities.shopping) db[city].activities.shopping = [{ name: "City Center", cost: "Varied", hours: "10am-8pm", link: "#", desc: "Local shops." }];
-            if(!db[city].activities.nightlife) db[city].activities.nightlife = [{ name: "City Night Walk", cost: "Free", hours: "Evening", link: "#", desc: "Enjoy the city lights." }];
+            const defaults = {
+                culture: [{ name: "Local Museum", cost: "$15", hours: "10am-5pm", link: "#", desc: "Art & history." }],
+                food: [{ name: "City Center Dining", cost: "Varied", hours: "11am-10pm", link: "#", desc: "Local cuisine." }],
+                nature: [{ name: "Public Park", cost: "Free", hours: "Dawn-Dusk", link: "#", desc: "Green space." }],
+                history: [{ name: "Historic District", cost: "Free", hours: "24h", link: "#", desc: "Old town streets." }],
+                relaxation: [{ name: "City Spa", cost: "$50+", hours: "9am-9pm", link: "#", desc: "Wellness center." }],
+                shopping: [{ name: "Main Street", cost: "Varied", hours: "10am-8pm", link: "#", desc: "Local shops." }],
+                adventure: [{ name: "City Tour", cost: "$30", hours: "10am", link: "#", desc: "Guided sightseeing." }],
+                nightlife: [{ name: "Night Market", cost: "Free", hours: "Evening", link: "#", desc: "Evening vibes." }]
+            };
+            
+            ['culture', 'food', 'nature', 'history', 'relaxation', 'shopping', 'adventure', 'nightlife'].forEach(cat => {
+                if(!db[city].activities[cat]) db[city].activities[cat] = defaults[cat];
+            });
         });
 
         // --- UI LOGIC ---
@@ -685,9 +986,10 @@
             
             let selectedInterests = Array.from(document.querySelectorAll('input[name="interest"]:checked')).map(el => el.value);
             
-            // Age Safety Check
+            // Age Safety Check: If family/under 18, forcibly remove nightlife
             if (ageGroup === 'family') {
                 selectedInterests = selectedInterests.filter(i => i !== 'nightlife');
+                // Ensure there are still interests
                 if(selectedInterests.length === 0) selectedInterests.push('nature', 'culture');
             }
 
@@ -709,7 +1011,7 @@
             for (let i = 0; i < days; i++) {
                 // Calculate Real Date
                 const currentDate = new Date(startDate);
-                currentDate.setDate(startDate.getDate() + i + 1);
+                currentDate.setDate(startDate.getDate() + i + 1); // +1 because start date input is technically "arrival", activity starts
                 const options = { weekday: 'long', month: 'short', day: 'numeric' };
                 const dateString = currentDate.toLocaleDateString('en-US', options);
 
@@ -753,12 +1055,14 @@
 
                 // Fill slots
                 for(let k=0; k<count; k++) {
+                    // Loop pool if not enough
                     dailyActivities.push(shuffledMain[k % shuffledMain.length]);
                 }
 
-                // Sports insertion
+                // Sports insertion (Low chance for family unless explicitly sports focus)
                 if (selectedInterests.includes('sports') && cityData.teams.length > 0 && Math.random() > 0.5) {
                     const team = getRandom(cityData.teams);
+                    // For family, ensure venue is safe/standard (usually implies filtering extreme sports, but stadiums are fine)
                     dailyActivities[dailyActivities.length - 1] = {
                         isSports: true,
                         name: `${team.home} Game`,
@@ -779,7 +1083,8 @@
                     const timeLabel = timeSlots[index] || "Activity";
                     
                     // Age Appropriate Filtering for Family
-                    if (ageGroup === 'family' && act.desc && act.desc.toLowerCase().includes('club')) {
+                    // If family selected, and activity somehow is "Nightlife" (Bar), swap it visually
+                    if (ageGroup === 'family' && act.desc.toLowerCase().includes('club')) {
                         act.name = "Evening Light Show";
                         act.desc = "Safe and fun evening entertainment.";
                     }
