@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate Destination | AI Travel Planner</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    colors: {
+                        brand: {
+                            dark: '#0f172a',
+                            accent: '#3b82f6',
+                            highlight: '#f43f5e'
+                        }
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom scrollbar for clean look */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+        
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3b82f6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .activity-card {
+            transition: all 0.3s ease;
+        }
+        .activity-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        
+        .hidden-input {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out;
+            opacity: 0;
+        }
+        .hidden-input.show {
+            max-height: 100px;
+            opacity: 1;
+            margin-top: 0.75rem;
+        }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navbar -->
+    <nav class="bg-brand-dark text-white p-4 sticky top-0 z-50 shadow-lg">
+        <div class="max-w-6xl mx-auto flex justify-between items-center">
+            <div class="flex items-center gap-2">
+                <i class="fas fa-globe-americas text-brand-accent text-2xl"></i>
+                <h1 class="text-2xl font-bold font-serif tracking-wide">Ultimate Destination</h1>
+            </div>
+            <div class="hidden md:flex gap-6 text-sm font-medium">
+                <a href="#" class="hover:text-brand-accent transition">My Trips</a>
+                <a href="#" class="hover:text-brand-accent transition">Community</a>
+                <a href="#" class="hover:text-brand-accent transition">Account</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow">
+        
+        <!-- Hero / Input Section -->
+        <section id="input-section" class="relative bg-brand-dark py-16 md:py-24 overflow-hidden">
+            <!-- Background Image overlay -->
+            <div class="absolute inset-0 opacity-30">
+                <img src="https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?ixlib=rb-4.0.3&auto=format&fit=crop&w=2021&q=80" alt="Travel" class="w-full h-full object-cover">
+            </div>
+            
+            <div class="relative max-w-5xl mx-auto px-4 text-center">
+                <h2 class="text-4xl md:text-6xl font-serif text-white mb-6 font-bold leading-tight">
+                    Your Dream Vacation, <br><span class="text-brand-accent">AI Generated.</span>
+                </h2>
+                <p class="text-slate-300 text-lg mb-10 max-w-2xl mx-auto">
+                    Tell us where you want to go and what you love. Our engine builds a personalized itinerary with live costs, hours, and direct booking links.
+                </p>
+
+                <!-- Configuration Form -->
+                <div class="glass-panel rounded-2xl p-6 md:p-8 text-left shadow-2xl max-w-4xl mx-auto transform transition-all">
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
+                        
+                        <!-- Destination -->
+                        <div class="md:col-span-2">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Destination</label>
+                            <div class="relative">
+                                <i class="fas fa-map-marker-alt absolute left-3 top-3 text-slate-400"></i>
+                                <select id="destination" onchange="toggleCustomDest()" class="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white appearance-none cursor-pointer">
+                                    <option value="new-york">New York City, USA</option>
+                                    <option value="paris">Paris, France</option>
+                                    <option value="london">London, UK</option>
+                                    <option value="tokyo">Tokyo, Japan</option>
+                                    <option value="rome">Rome, Italy</option>
+                                    <option value="barcelona">Barcelona, Spain</option>
+                                    <option value="sydney">Sydney, Australia</option>
+                                    <option value="dubai">Dubai, UAE</option>
+                                    <option value="custom">Other / Custom Location...</option>
+                                </select>
+                            </div>
+                            <!-- Custom Destination Input -->
+                            <div id="custom-dest-container" class="hidden-input">
+                                <input type="text" id="custom-dest-val" placeholder="Enter City Name (e.g. Rio de Janeiro)" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-slate-50">
+                            </div>
+                        </div>
+
+                        <!-- Duration -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Duration</label>
+                            <div class="relative">
+                                <i class="fas fa-calendar-alt absolute left-3 top-3 text-slate-400"></i>
+                                <select id="duration" class="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white appearance-none cursor-pointer">
+                                    <option value="1">1 Day</option>
+                                    <option value="3" selected>3 Days</option>
+                                    <option value="5">5 Days</option>
+                                    <option value="7">7 Days</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Budget -->
+                        <div>
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Budget</label>
+                            <div class="relative">
+                                <i class="fas fa-tag absolute left-3 top-3 text-slate-400"></i>
+                                <select id="budget" class="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-200 focus:ring-2 focus:ring-brand-accent focus:border-transparent bg-white appearance-none cursor-pointer">
+                                    <option value="economy">Economy ($)</option>
+                                    <option value="standard" selected>Standard ($$)</option>
+                                    <option value="luxury">Luxury ($$$)</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Pace -->
+                        <div class="md:col-span-2 lg:col-span-4">
+                            <label class="block text-sm font-bold text-slate-700 mb-2">Travel Pace</label>
+                            <div class="flex gap-4">
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="pace" value="relaxed" class="peer sr-only">
+                                    <div class="text-center p-3 rounded-lg border border-slate-200 peer-checked:bg-teal-50 peer-checked:border-teal-500 peer-checked:text-teal-700 hover:bg-slate-50 transition">
+                                        <div class="font-bold">Relaxed</div>
+                                        <div class="text-xs text-slate-500">1-2 Activities/Day</div>
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="pace" value="moderate" checked class="peer sr-only">
+                                    <div class="text-center p-3 rounded-lg border border-slate-200 peer-checked:bg-blue-50 peer-checked:border-blue-500 peer-checked:text-blue-700 hover:bg-slate-50 transition">
+                                        <div class="font-bold">Moderate</div>
+                                        <div class="text-xs text-slate-500">3 Activities/Day</div>
+                                    </div>
+                                </label>
+                                <label class="flex-1 cursor-pointer">
+                                    <input type="radio" name="pace" value="fast" class="peer sr-only">
+                                    <div class="text-center p-3 rounded-lg border border-slate-200 peer-checked:bg-purple-50 peer-checked:border-purple-500 peer-checked:text-purple-700 hover:bg-slate-50 transition">
+                                        <div class="font-bold">Packed</div>
+                                        <div class="text-xs text-slate-500">4+ Activities/Day</div>
+                                    </div>
+                                </label>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <!-- Interests -->
+                    <div class="mb-8">
+                        <label class="block text-sm font-bold text-slate-700 mb-3">Interests (Select at least one)</label>
+                        <div class="flex flex-wrap gap-3">
+                            <label class="cursor-pointer select-none">
+                                <input type="checkbox" name="interest" value="culture" checked class="peer sr-only">
+                                <div class="px-4 py-2 rounded-full border border-slate-300 text-slate-600 peer-checked:bg-brand-accent peer-checked:text-white peer-checked:border-brand-accent transition hover:bg-slate-50 peer-checked:hover:bg-blue-600">
+                                    <i class="fas fa-landmark mr-1"></i> Culture
+                                </div>
+                            </label>
+                            <label class="cursor-pointer select-none">
+                                <input type="checkbox" name="interest" value="food" checked class="peer sr-only">
+                                <div class="px-4 py-2 rounded-full border border-slate-300 text-slate-600 peer-checked:bg-emerald-500 peer-checked:text-white peer-checked:border-emerald-500 transition hover:bg-slate-50 peer-checked:hover:bg-emerald-600">
+                                    <i class="fas fa-utensils mr-1"></i> Food
+                                </div>
+                            </label>
+                            <label class="cursor-pointer select-none">
+                                <input type="checkbox" name="interest" value="sports" class="peer sr-only">
+                                <div class="px-4 py-2 rounded-full border border-slate-300 text-slate-600 peer-checked:bg-brand-highlight peer-checked:text-white peer-checked:border-brand-highlight transition hover:bg-slate-50 peer-checked:hover:bg-rose-600">
+                                    <i class="fas fa-basketball-ball mr-1"></i> Sports
+                                </div>
+                            </label>
+                            <label class="cursor-pointer select-none">
+                                <input type="checkbox" name="interest" value="nature" class="peer sr-only">
+                                <div class="px-4 py-2 rounded-full border border-slate-300 text-slate-600 peer-checked:bg-teal-500 peer-checked:text-white peer-checked:border-teal-500 transition hover:bg-slate-50 peer-checked:hover:bg-teal-600">
+                                    <i class="fas fa-leaf mr-1"></i> Nature
+                                </div>
+                            </label>
+                            <label class="cursor-pointer select-none">
+                                <input type="checkbox" name="interest" value="shopping" class="peer sr-only">
+                                <div class="px-4 py-2 rounded-full border border-slate-300 text-slate-600 peer-checked:bg-pink-500 peer-checked:text-white peer-checked:border-pink-500 transition hover:bg-slate-50 peer-checked:hover:bg-pink-600">
+                                    <i class="fas fa-shopping-bag mr-1"></i> Shopping
+                                </div>
+                            </label>
+                            <!-- Custom Interest Toggle -->
+                            <label class="cursor-pointer select-none">
+                                <input type="checkbox" id="custom-interest-check" onchange="toggleCustomInterest()" class="peer sr-only">
+                                <div class="px-4 py-2 rounded-full border border-slate-300 text-slate-600 peer-checked:bg-purple-500 peer-checked:text-white peer-checked:border-purple-500 transition hover:bg-slate-50 peer-checked:hover:bg-purple-600">
+                                    <i class="fas fa-plus mr-1"></i> Specific Interest?
+                                </div>
+                            </label>
+                        </div>
+                        
+                        <!-- Custom Interest Input -->
+                        <div id="custom-interest-container" class="hidden-input">
+                            <input type="text" id="custom-interest-val" placeholder="Enter Interest (e.g. History, Anime, Architecture)" class="w-full px-4 py-2 rounded-lg border border-slate-200 focus:ring-2 focus:ring-purple-500 focus:border-transparent bg-slate-50">
+                        </div>
+                    </div>
+
+                    <button onclick="generateItinerary()" class="w-full bg-brand-dark hover:bg-slate-800 text-white font-bold py-4 rounded-xl shadow-lg transition transform active:scale-95 flex justify-center items-center gap-2 text-lg">
+                        <i class="fas fa-magic"></i> Generate My Itinerary
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Loading View (Hidden by default) -->
+        <section id="loading-view" class="hidden py-24 text-center">
+            <div class="flex flex-col items-center justify-center">
+                <div class="loader mb-6"></div>
+                <h3 class="text-2xl font-bold text-slate-700 mb-2">Building your dream trip...</h3>
+                <p class="text-slate-500" id="loading-text">Checking official ticket availability...</p>
+            </div>
+        </section>
+
+        <!-- Results View (Hidden by default) -->
+        <section id="results-view" class="hidden max-w-6xl mx-auto px-4 py-12">
+            
+            <!-- Itinerary Header -->
+            <div class="flex flex-col md:flex-row justify-between items-end mb-10 border-b border-slate-200 pb-6">
+                <div>
+                    <div class="text-sm font-bold text-brand-accent uppercase tracking-wider mb-1">Your Personal Plan</div>
+                    <h2 class="text-4xl font-serif font-bold text-slate-800" id="result-title">Trip to Paris</h2>
+                    <p class="text-slate-500 mt-2" id="result-subtitle">5 Days • Food & Culture Focus</p>
+                </div>
+                <button onclick="resetApp()" class="mt-4 md:mt-0 px-6 py-2 bg-white border border-slate-300 rounded-lg text-slate-600 hover:bg-slate-50 hover:text-brand-dark transition shadow-sm text-sm font-bold">
+                    <i class="fas fa-redo-alt mr-2"></i> Start Over
+                </button>
+            </div>
+
+            <!-- Timeline Container -->
+            <div id="itinerary-container" class="space-y-12">
+                <!-- Days will be injected here by JS -->
+            </div>
+
+        </section>
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-8 text-center text-slate-400 text-sm">
+        <p>&copy; 2025 Ultimate Destination. Pricing and availability subject to change.</p>
+    </footer>
+
+    <!-- Javascript Logic -->
+    <script>
+        // --- DATA MOCKUP ---
+        
+        const getRandom = (arr) => arr[Math.floor(Math.random() * arr.length)];
+        
+        const shuffle = (array) => {
+            let currentIndex = array.length, randomIndex;
+            while (currentIndex != 0) {
+                randomIndex = Math.floor(Math.random() * currentIndex);
+                currentIndex--;
+                [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+            }
+            return array;
+        }
+
+        // Expanded Database with Direct Official Links
+        const db = {
+            "new-york": {
+                name: "New York City",
+                teams: [
+                    { home: "NY Knicks", venue: "Madison Square Garden", league: "NBA" },
+                    { home: "NY Yankees", venue: "Yankee Stadium", league: "MLB" }
+                ],
+                activities: {
+                    culture: [
+                        { name: "The Metropolitan Museum of Art", cost: "$30", hours: "10:00 AM - 5:00 PM", link: "https://www.metmuseum.org/", desc: "One of the world's largest and finest art museums." },
+                        { name: "MoMA", cost: "$25", hours: "10:30 AM - 5:30 PM", link: "https://www.moma.org/", desc: "The Museum of Modern Art, featuring Starry Night and more." },
+                        { name: "9/11 Memorial & Museum", cost: "$28", hours: "9:00 AM - 8:00 PM", link: "https://www.911memorial.org/", desc: "A tribute of remembrance and honor." },
+                        { name: "Broadway.com", cost: "$100+", hours: "7:00 PM Show", link: "https://www.broadway.com/", desc: "The official source for Broadway tickets and show info." }
+                    ],
+                    food: [
+                        { name: "Katz's Delicatessen", cost: "$25", hours: "8:00 AM - 10:45 PM", link: "https://katzsdelicatessen.com/", desc: "Legendary deli famous for its pastrami sandwiches." },
+                        { name: "Le Bernardin", cost: "$200+", hours: "12:00 PM - 10:30 PM", link: "https://www.le-bernardin.com/", desc: "Elite French seafood dining experience." },
+                        { name: "Chelsea Market", cost: "Free Entry", hours: "7:00 AM - 10:00 PM", link: "https://www.chelseamarket.com/", desc: "Indoor food hall with diverse vendors." }
+                    ],
+                    nature: [
+                        { name: "Central Park Conservancy", cost: "Free", hours: "6:00 AM - 1:00 AM", link: "https://www.centralparknyc.org/", desc: "Official site for the iconic urban park." },
+                        { name: "The High Line", cost: "Free", hours: "7:00 AM - 10:00 PM", link: "https://www.thehighline.org/", desc: "Public park built on a historic freight rail line." }
+                    ],
+                    shopping: [
+                        { name: "Fifth Avenue Shopping", cost: "Varied", hours: "10:00 AM - 8:00 PM", link: "https://visit5thavenue.com/", desc: "World-famous luxury shopping district." },
+                        { name: "SoHo Shopping District", cost: "Varied", hours: "11:00 AM - 7:00 PM", link: "https://www.sohonyc.com/", desc: "Trendy boutiques and cast-iron architecture." }
+                    ]
+                }
+            },
+            "london": {
+                name: "London",
+                teams: [
+                    { home: "Arsenal FC", venue: "Emirates Stadium", league: "Premier League" },
+                    { home: "Chelsea FC", venue: "Stamford Bridge", league: "Premier League" }
+                ],
+                activities: {
+                    culture: [
+                        { name: "The British Museum", cost: "Free", hours: "10:00 AM - 5:00 PM", link: "https://www.britishmuseum.org/", desc: "Dedicated to human history, art and culture." },
+                        { name: "Tower of London", cost: "£33", hours: "9:00 AM - 5:30 PM", link: "https://www.hrp.org.uk/tower-of-london/", desc: "Historic castle and home of the Crown Jewels." },
+                        { name: "Tate Modern", cost: "Free", hours: "10:00 AM - 6:00 PM", link: "https://www.tate.org.uk/visit/tate-modern", desc: "International modern and contemporary art." }
+                    ],
+                    food: [
+                        { name: "Borough Market", cost: "Free Entry", hours: "10:00 AM - 5:00 PM", link: "https://boroughmarket.org.uk/", desc: "Historic market hall with gourmet foods." },
+                        { name: "The Ritz London", cost: "£70+", hours: "11:30 AM - 7:30 PM", link: "https://www.theritzlondon.com/dine-with-us/afternoon-tea/", desc: "The quintessential British tea experience." }
+                    ],
+                    nature: [
+                        { name: "Royal Parks (Hyde Park)", cost: "Free", hours: "5:00 AM - Midnight", link: "https://www.royalparks.org.uk/parks/hyde-park", desc: "One of the largest parks in central London." },
+                        { name: "Kew Gardens", cost: "£19.50", hours: "10:00 AM - 7:00 PM", link: "https://www.kew.org/", desc: "Royal Botanic Gardens with diverse plant life." }
+                    ],
+                    shopping: [
+                        { name: "Harrods", cost: "Varied", hours: "10:00 AM - 9:00 PM", link: "https://www.harrods.com/", desc: "The world's leading luxury department store." },
+                        { name: "Oxford Street", cost: "Varied", hours: "9:00 AM - 9:00 PM", link: "https://www.oxfordstreet.co.uk/", desc: "Europe's busiest shopping street." }
+                    ]
+                }
+            },
+            "paris": {
+                name: "Paris",
+                teams: [
+                    { home: "Paris Saint-Germain (PSG)", venue: "Parc des Princes", league: "Ligue 1" }
+                ],
+                activities: {
+                    culture: [
+                        { name: "The Louvre", cost: "€17", hours: "9:00 AM - 6:00 PM", link: "https://www.louvre.fr/en", desc: "Official site of the world's largest art museum." },
+                        { name: "Musée d'Orsay", cost: "€16", hours: "9:30 AM - 6:00 PM", link: "https://www.musee-orsay.fr/en", desc: "Impressionist art in a converted railway station." },
+                        { name: "Eiffel Tower Official", cost: "€28", hours: "9:00 AM - 11:45 PM", link: "https://www.toureiffel.paris/en", desc: "Buy tickets directly from the monument." }
+                    ],
+                    food: [
+                        { name: "Café de Flore", cost: "€15", hours: "7:30 AM - 1:30 AM", link: "https://cafedeflore.fr/", desc: "One of the oldest coffeehouses in Paris." },
+                        { name: "Ladurée Champs-Elysées", cost: "€10+", hours: "8:00 AM - 9:30 PM", link: "https://www.laduree.fr/en/", desc: "Famous for their double-decker macarons." }
+                    ],
+                    nature: [
+                        { name: "Jardin des Tuileries", cost: "Free", hours: "7:00 AM - 9:00 PM", link: "https://www.parisinfo.com/transport/71720/Jardin-des-Tuileries", desc: "Public garden located between the Louvre and Concorde." }
+                    ],
+                    shopping: [
+                        { name: "Galeries Lafayette", cost: "Varied", hours: "10:00 AM - 8:00 PM", link: "https://haussmann.galerieslafayette.com/en/", desc: "Upscale French department store with a stunning dome." }
+                    ]
+                }
+            },
+            "tokyo": {
+                name: "Tokyo",
+                teams: [
+                    { home: "Yomiuri Giants", venue: "Tokyo Dome", league: "NPB" }
+                ],
+                activities: {
+                    culture: [
+                        { name: "Senso-ji Temple", cost: "Free", hours: "6:00 AM - 5:00 PM", link: "https://www.senso-ji.jp/english/", desc: "Tokyo's oldest and most significant temple." },
+                        { name: "teamLab Planets", cost: "¥3,200", hours: "10:00 AM - 8:00 PM", link: "https://planets.teamlab.art/tokyo/", desc: "Official site for the immersive digital art museum." },
+                        { name: "Tokyo Skytree", cost: "¥2,100", hours: "10:00 AM - 9:00 PM", link: "https://www.tokyo-skytree.jp/en/", desc: "Tallest tower in the world with observation decks." }
+                    ],
+                    food: [
+                        { name: "Tsukiji Outer Market", cost: "Varied", hours: "5:00 AM - 2:00 PM", link: "https://www.tsukiji.or.jp/english/", desc: "Fresh sushi breakfasts and street food." },
+                        { name: "Ichiran Ramen", cost: "¥980", hours: "24 Hours", link: "https://en.ichiran.com/", desc: "Famous tonkotsu ramen with solitary dining booths." }
+                    ],
+                    nature: [
+                        { name: "Shinjuku Gyoen National Garden", cost: "¥500", hours: "9:00 AM - 4:00 PM", link: "https://fng.or.jp/shinjuku/en/", desc: "One of Tokyo's largest and most popular parks." }
+                    ],
+                    shopping: [
+                        { name: "Ginza Six", cost: "Varied", hours: "10:30 AM - 8:30 PM", link: "https://ginza6.tokyo/", desc: "Luxury shopping complex in the Ginza district." },
+                        { name: "Akihabara Electric Town", cost: "Varied", hours: "10:00 AM - 9:00 PM", link: "https://akihabara-japan.com/", desc: "Hub for electronics, anime, and manga." }
+                    ]
+                }
+            },
+            "rome": {
+                name: "Rome",
+                teams: [{ home: "AS Roma", venue: "Stadio Olimpico", league: "Serie A" }],
+                activities: {
+                    culture: [
+                        { name: "The Colosseum", cost: "€16", hours: "8:30 AM - 7:00 PM", link: "https://parcocolosseo.it/en/", desc: "The official archaeological park of the Colosseum." },
+                        { name: "Vatican Museums", cost: "€17", hours: "9:00 AM - 6:00 PM", link: "https://m.museivaticani.va/content/museivaticani-mobile/en.html", desc: "Official site for the Sistine Chapel and Vatican art." },
+                        { name: "Pantheon", cost: "€5", hours: "9:00 AM - 7:00 PM", link: "https://www.direzionemuseiroma.beniculturali.it/en/luoghi/pantheon/", desc: "Ancient Roman temple, now a church." }
+                    ],
+                    food: [
+                        { name: "Mercato Centrale Roma", cost: "Varied", hours: "8:00 AM - 12:00 AM", link: "https://www.mercatocentrale.com/rome/", desc: "Artisanal food market near Termini station." },
+                        { name: "Giolitti Gelato", cost: "€3+", hours: "7:00 AM - 1:00 AM", link: "https://www.giolitti.it/", desc: "Historic ice cream parlor near the Pantheon." }
+                    ],
+                    nature: [
+                        { name: "Villa Borghese", cost: "Free", hours: "Dawn - Dusk", link: "https://sovraintendenzaroma.it/i_luoghi/ville_e_parchi_storici/ville_dei_nobili/villa_borghese", desc: "Large landscape garden in Rome." }
+                    ],
+                    shopping: [
+                        { name: "Via del Corso", cost: "Varied", hours: "10:00 AM - 8:00 PM", link: "https://www.turismoroma.it/en/places/via-del-corso", desc: "Main shopping street stretching through the city center." }
+                    ]
+                }
+            },
+            "barcelona": {
+                name: "Barcelona",
+                teams: [{ home: "FC Barcelona", venue: "Camp Nou", league: "La Liga" }],
+                activities: {
+                    culture: [
+                        { name: "Sagrada Família", cost: "€26", hours: "9:00 AM - 6:00 PM", link: "https://sagradafamilia.org/en/", desc: "Gaudí's unfinished masterpiece basilica." },
+                        { name: "Park Güell", cost: "€10", hours: "9:30 AM - 7:30 PM", link: "https://parkguell.barcelona/en", desc: "Public park system composed of gardens and architectonic elements." },
+                        { name: "Casa Batlló", cost: "€35", hours: "9:00 AM - 8:00 PM", link: "https://www.casabatllo.es/en/", desc: "A renowned building located in the center of Barcelona." }
+                    ],
+                    food: [
+                        { name: "La Boqueria Market", cost: "Free Entry", hours: "8:00 AM - 8:30 PM", link: "http://www.boqueria.barcelona/home", desc: "World famous market on Las Ramblas." },
+                        { name: "El Xampanyet", cost: "€15+", hours: "12:00 PM - 11:30 PM", link: "https://www.elxampanyet.es/", desc: "Traditional tapas bar with house-made sparkling wine." }
+                    ],
+                    nature: [
+                        { name: "Ciutadella Park", cost: "Free", hours: "10:00 AM - 10:30 PM", link: "https://www.barcelona.cat/en/what-to-do-in-bcn/parks-and-gardens/parc-de-la-ciutadella", desc: "Historic park with a zoo and lake." }
+                    ],
+                    shopping: [
+                        { name: "Passeig de Gràcia", cost: "Varied", hours: "10:00 AM - 9:00 PM", link: "https://barcelonapasseigdegracia.com/en/", desc: "One of the major avenues and shopping areas." }
+                    ]
+                }
+            },
+            "sydney": {
+                name: "Sydney",
+                teams: [{ home: "Sydney Swans", venue: "SCG", league: "AFL" }],
+                activities: {
+                    culture: [
+                        { name: "Sydney Opera House", cost: "Varied", hours: "9:00 AM - 5:00 PM", link: "https://www.sydneyoperahouse.com/", desc: "Multi-venue performing arts centre." },
+                        { name: "Sydney Harbour Bridge", cost: "$300 (Climb)", hours: "Dawn - Dusk", link: "https://www.bridgeclimb.com/", desc: "Iconic bridge with climbing tours available." }
+                    ],
+                    food: [
+                        { name: "Sydney Fish Market", cost: "Varied", hours: "7:00 AM - 4:00 PM", link: "https://www.sydneyfishmarket.com.au/", desc: "Largest market of its kind in the Southern Hemisphere." }
+                    ],
+                    nature: [
+                        { name: "Royal Botanic Garden", cost: "Free", hours: "7:00 AM - 5:00 PM", link: "https://www.rbgsyd.nsw.gov.au/", desc: "Major botanical garden located in the heart of Sydney." },
+                        { name: "Bondi Beach", cost: "Free", hours: "24 Hours", link: "https://www.bondivillage.com/", desc: "Famous beach and surrounding parklands." }
+                    ],
+                    shopping: [
+                        { name: "Queen Victoria Building", cost: "Varied", hours: "9:00 AM - 6:00 PM", link: "https://www.qvb.com.au/", desc: "Heritage-listed late-nineteenth-century building." }
+                    ]
+                }
+            },
+            "dubai": {
+                name: "Dubai",
+                teams: [{ home: "Al Wasl FC", venue: "Zabeel Stadium", league: "UAE Pro League" }],
+                activities: {
+                    culture: [
+                        { name: "Burj Khalifa", cost: "AED 169", hours: "10:00 AM - 11:00 PM", link: "https://www.burjkhalifa.ae/en/", desc: "The world's tallest building." },
+                        { name: "Museum of the Future", cost: "AED 145", hours: "10:00 AM - 6:00 PM", link: "https://museumofthefuture.ae/en", desc: "Exhibition space for innovative and futuristic ideologies." }
+                    ],
+                    food: [
+                        { name: "Time Out Market Dubai", cost: "Varied", hours: "12:00 PM - 12:00 AM", link: "https://www.timeoutmarket.com/dubai/", desc: "Curated food and cultural market." }
+                    ],
+                    nature: [
+                        { name: "Dubai Miracle Garden", cost: "AED 55", hours: "9:00 AM - 9:00 PM", link: "https://www.dubaimiraclegarden.com/", desc: "The world's largest natural flower garden." }
+                    ],
+                    shopping: [
+                        { name: "The Dubai Mall", cost: "Free Entry", hours: "10:00 AM - 12:00 AM", link: "https://thedubaimall.com/", desc: "One of the world's largest shopping malls." }
+                    ]
+                }
+            }
+        };
+
+        const opposingTeams = ["Red Warriors", "Blue Jays", "City United", "Athletic Club", "Rovers", "Tigers", "Eagles"];
+
+        // --- UI TOGGLE LOGIC ---
+
+        function toggleCustomDest() {
+            const val = document.getElementById('destination').value;
+            const container = document.getElementById('custom-dest-container');
+            if(val === 'custom') {
+                container.classList.add('show');
+            } else {
+                container.classList.remove('show');
+            }
+        }
+
+        function toggleCustomInterest() {
+            const checked = document.getElementById('custom-interest-check').checked;
+            const container = document.getElementById('custom-interest-container');
+            if(checked) {
+                container.classList.add('show');
+            } else {
+                container.classList.remove('show');
+            }
+        }
+
+        function resetApp() {
+            document.getElementById('input-section').classList.remove('hidden');
+            document.getElementById('results-view').classList.add('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // --- HELPER FOR CUSTOM CITY DATA GENERATION ---
+
+        function getCityData(key, customName) {
+            // If it's a known city in DB, return it
+            if (db[key]) return db[key];
+
+            // If custom, generate generic but plausible data
+            // NOTE: For custom cities, we can't generate specific real URLs without an API,
+            // so we fallback to a high-quality search link or a generic placeholder logic.
+            const cleanName = customName || "Mystery City";
+            return {
+                name: cleanName,
+                teams: [
+                    { home: `${cleanName} FC`, venue: `${cleanName} City Stadium`, league: "Local League" },
+                    { home: `${cleanName} United`, venue: "Downtown Arena", league: "Pro League" }
+                ],
+                activities: {
+                    culture: [
+                        { name: `National Museum of ${cleanName}`, cost: "$20", hours: "9:00 AM - 5:00 PM", link: `https://www.google.com/search?q=${cleanName}+museums+official+site`, desc: `Explore the rich history and art of ${cleanName} in this central museum.` },
+                        { name: `${cleanName} City Tower`, cost: "$15", hours: "10:00 AM - 9:00 PM", link: `https://www.google.com/search?q=${cleanName}+tower+visit`, desc: "Get panoramic views of the city skyline." },
+                        { name: "Old Town Walking Tour", cost: "Free", hours: "Anytime", link: `https://www.google.com/search?q=${cleanName}+walking+tour`, desc: "Wander through historic streets and see the architecture." }
+                    ],
+                    food: [
+                        { name: `${cleanName} Central Market`, cost: "Varied", hours: "8:00 AM - 6:00 PM", link: `https://www.google.com/search?q=${cleanName}+food+market`, desc: "Taste local delicacies and fresh produce." },
+                        { name: "The Grand Cafe", cost: "$20-$40", hours: "7:00 AM - 10:00 PM", link: `https://www.google.com/search?q=best+cafe+in+${cleanName}`, desc: "A popular spot for locals and tourists alike." }
+                    ],
+                    nature: [
+                        { name: `${cleanName} Public Gardens`, cost: "Free", hours: "Sunrise - Sunset", link: `https://www.google.com/search?q=${cleanName}+parks`, desc: "A green oasis in the heart of the city." }
+                    ],
+                    shopping: [
+                        { name: `Downtown ${cleanName} Mall`, cost: "Varied", hours: "10:00 AM - 9:00 PM", link: `https://www.google.com/search?q=shopping+in+${cleanName}`, desc: "The main shopping hub of the city." }
+                    ]
+                }
+            };
+        }
+
+        // --- GENERATOR LOGIC ---
+
+        function generateItinerary() {
+            // UI Handling
+            document.getElementById('input-section').classList.add('hidden');
+            document.getElementById('results-view').classList.add('hidden');
+            document.getElementById('loading-view').classList.remove('hidden');
+            
+            const loadingTexts = [
+                "Negotiating with hotel concierges...",
+                "Checking sports schedules...",
+                "Finding the best coffee spots...",
+                "Calculating walking distances...",
+                "Curating local hidden gems..."
+            ];
+            
+            let step = 0;
+            const interval = setInterval(() => {
+                document.getElementById('loading-text').innerText = loadingTexts[step % loadingTexts.length];
+                step++;
+            }, 500);
+
+            // Simulate AI Delay
+            setTimeout(() => {
+                clearInterval(interval);
+                buildItinerary();
+                document.getElementById('loading-view').classList.add('hidden');
+                document.getElementById('results-view').classList.remove('hidden');
+                
+                // Scroll to results
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }, 2000);
+        }
+
+        function buildItinerary() {
+            const destSelect = document.getElementById('destination').value;
+            const customCityName = document.getElementById('custom-dest-val').value;
+            const days = parseInt(document.getElementById('duration').value);
+            const budget = document.getElementById('budget').value;
+            const pace = document.querySelector('input[name="pace"]:checked').value;
+            
+            // Determine daily activity count based on Pace
+            let dailyCount = 3; // Moderate default
+            if(pace === 'relaxed') dailyCount = 2;
+            if(pace === 'fast') dailyCount = 4;
+
+            // Get Checked Interests
+            let selectedInterests = Array.from(document.querySelectorAll('input[name="interest"]:checked')).map(el => el.value);
+            
+            const customInterestCheck = document.getElementById('custom-interest-check').checked;
+            const customInterestVal = document.getElementById('custom-interest-val').value;
+            
+            if (customInterestCheck && customInterestVal) {
+                selectedInterests.push('custom'); 
+            }
+
+            if (selectedInterests.length === 0) {
+                selectedInterests.push('culture', 'food');
+            }
+
+            const cityData = getCityData(destSelect, customCityName);
+            
+            document.getElementById('result-title').innerText = `Trip to ${cityData.name}`;
+            
+            let displayInterests = selectedInterests.filter(i => i !== 'custom').map(i => i.charAt(0).toUpperCase() + i.slice(1));
+            if (customInterestCheck && customInterestVal) {
+                displayInterests.push(customInterestVal);
+            }
+            
+            document.getElementById('result-subtitle').innerText = `${days} Days • ${displayInterests.join(', ')} • ${budget.charAt(0).toUpperCase() + budget.slice(1)} Budget`;
+
+            const container = document.getElementById('itinerary-container');
+            container.innerHTML = '';
+
+            // Generate Day by Day
+            for (let i = 1; i <= days; i++) {
+                const dayHTML = document.createElement('div');
+                dayHTML.className = "relative border-l-4 border-slate-200 pl-8 pb-8";
+                
+                const dayMarker = `
+                    <div class="absolute -left-3 top-0 bg-brand-accent text-white w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold border-4 border-white shadow-md">
+                        ${i}
+                    </div>
+                    <h3 class="text-2xl font-bold text-slate-800 mb-6">Day ${i}</h3>
+                `;
+
+                // Pool generation
+                let mainPool = [];
+                // Add activities based on interests
+                selectedInterests.forEach(interest => {
+                    if (interest === 'custom') {
+                         mainPool.push({
+                            name: `${customInterestVal} Experience`,
+                            cost: "Varied",
+                            hours: "10:00 AM - 4:00 PM",
+                            link: `https://www.google.com/search?q=${cityData.name}+${customInterestVal}+official`,
+                            desc: `Explore the best of ${customInterestVal} that ${cityData.name} has to offer.`
+                        });
+                    } else if (cityData.activities[interest]) {
+                        mainPool.push(...cityData.activities[interest]);
+                    }
+                });
+
+                // Fill with Culture if empty
+                if (mainPool.length === 0) mainPool.push(...(cityData.activities.culture || []));
+
+                const shuffledMain = shuffle([...mainPool]); 
+                let dailyActivities = [];
+
+                // Sports Logic (Special insertion)
+                let sportsAdded = false;
+                if (selectedInterests.includes('sports') && Math.random() > 0.4 && cityData.teams && cityData.teams.length > 0) {
+                     const team = getRandom(cityData.teams);
+                     const opponent = getRandom(opposingTeams);
+                     dailyActivities.push({
+                        isSports: true,
+                        name: `${team.home} vs ${opponent}`,
+                        venue: team.venue,
+                        cost: "$50 - $250",
+                        hours: "7:30 PM Start",
+                        link: `https://www.ticketmaster.com/search?q=${encodeURIComponent(team.home)}`,
+                        desc: `Catch a live ${team.league} game at the iconic ${team.venue}.`
+                     });
+                     sportsAdded = true;
+                     dailyCount--; // Takes up a slot
+                }
+
+                // Fill remaining slots
+                for(let k=0; k < dailyCount; k++) {
+                    if(shuffledMain[k]) dailyActivities.unshift(shuffledMain[k]); // Add to start so Sports is last (evening)
+                }
+                
+                // If sports was added, ensure it's at the end (evening)
+                if (sportsAdded) {
+                    // Logic handled by unshifting normal activities, pushing sports
+                }
+
+                // Render Cards
+                let cardsHTML = `<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">`;
+                
+                const timeSlots = ["Morning", "Lunch/Afternoon", "Afternoon", "Evening"];
+
+                dailyActivities.forEach((act, index) => {
+                    // Adjust time label based on index relative to count
+                    let timeLabel = "Activity";
+                    if (index === 0) timeLabel = "Morning";
+                    else if (index === dailyActivities.length - 1) timeLabel = "Evening";
+                    else timeLabel = "Afternoon";
+
+                    // Budget adjustment logic (Visual only)
+                    let displayedCost = act.cost;
+                    if (budget === 'economy' && act.cost.includes('$')) displayedCost += " (Look for discounts)";
+                    if (budget === 'luxury') displayedCost += " (VIP Available)";
+
+                    if (act.isSports) {
+                        cardsHTML += `
+                            <div class="activity-card bg-brand-dark text-white rounded-xl overflow-hidden shadow-lg border border-slate-700 flex flex-col">
+                                <div class="bg-gradient-to-r from-blue-600 to-indigo-700 p-4 relative">
+                                    <span class="absolute top-3 right-3 bg-white/20 px-2 py-1 rounded text-xs font-bold backdrop-blur-sm">SPORTS</span>
+                                    <div class="text-sm font-bold text-blue-200 mb-1">Evening Event</div>
+                                    <h4 class="text-xl font-bold font-serif">${act.name}</h4>
+                                    <div class="text-xs text-blue-100 mt-1"><i class="fas fa-map-pin mr-1"></i> ${act.venue}</div>
+                                </div>
+                                <div class="p-4 flex-grow flex flex-col justify-between">
+                                    <p class="text-slate-300 text-sm mb-4">${act.desc}</p>
+                                    <div class="space-y-3">
+                                        <div class="flex justify-between text-sm border-t border-slate-700 pt-3">
+                                            <span class="text-slate-400">Est. Cost</span>
+                                            <span class="font-bold text-emerald-400">${displayedCost}</span>
+                                        </div>
+                                        <div class="flex justify-between text-sm">
+                                            <span class="text-slate-400">Start Time</span>
+                                            <span class="font-bold">${act.hours}</span>
+                                        </div>
+                                        <a href="${act.link}" target="_blank" class="block w-full text-center bg-brand-highlight hover:bg-rose-600 text-white font-bold py-2 rounded transition mt-3">
+                                            <i class="fas fa-ticket-alt mr-1"></i> Official Tickets
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    } else {
+                        cardsHTML += `
+                            <div class="activity-card bg-white rounded-xl overflow-hidden shadow-sm border border-slate-100 flex flex-col">
+                                <div class="p-5 flex-grow">
+                                    <div class="flex justify-between items-start mb-2">
+                                        <span class="bg-slate-100 text-slate-600 px-2 py-1 rounded text-xs font-bold uppercase">${timeLabel}</span>
+                                    </div>
+                                    <h4 class="text-lg font-bold text-slate-800 mb-2 font-serif">${act.name}</h4>
+                                    <p class="text-slate-500 text-sm leading-relaxed mb-4">${act.desc}</p>
+                                    
+                                    <div class="flex items-center gap-3 text-sm text-slate-600 mb-1">
+                                        <i class="far fa-clock text-brand-accent w-4"></i>
+                                        <span>${act.hours}</span>
+                                    </div>
+                                    <div class="flex items-center gap-3 text-sm text-slate-600">
+                                        <i class="fas fa-wallet text-brand-accent w-4"></i>
+                                        <span>${displayedCost}</span>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 p-4 border-t border-slate-100">
+                                    <a href="${act.link}" target="_blank" class="text-brand-accent hover:text-blue-700 font-bold text-sm flex items-center justify-between group">
+                                        Visit Official Website
+                                        <i class="fas fa-external-link-alt group-hover:translate-x-1 transition-transform"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        `;
+                    }
+                });
+                
+                cardsHTML += `</div>`;
+                dayHTML.innerHTML = dayMarker + cardsHTML;
+                container.appendChild(dayHTML);
+            }
+        }
+    </script>
+</body>
+</html>
